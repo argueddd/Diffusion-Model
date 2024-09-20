@@ -3,6 +3,11 @@ from collections import Counter
 import numpy as np
 from scipy.signal import convolve
 
+dt = 0.001
+fm = 35
+L = 200
+t = np.arange(-L / 2, L / 2 + 1) * dt
+N = 500
 
 def calculate_probability_distribution(signal, batch_size):
     prob_list = []
@@ -19,7 +24,6 @@ def calculate_probability_distribution(signal, batch_size):
         count_list[index] += 1
 
     # 计算每个区间的概率
-
     for i in range(batch_size):
         lower_bound = signal_min + i * interval
         prob_list.append([lower_bound, count_list[i] / len(signal)])
@@ -41,18 +45,17 @@ def calculate_probabilities_distribution_by_freq(lst):
 
 
 def generate_signal():
-    dt = 0.001
-    fm = 35
-    L = 200
-    t = np.arange(-L / 2, L / 2 + 1) * dt
-    N = 500
     # 生成信号
-    x = (1 - 2 * (np.pi * fm * t) ** 2) * np.exp(-(np.pi * fm * t) ** 2)
+    x = riker_calculate(fm)
     # 添加反射系数
     r = (np.random.normal(0, 0.28, N).round(3)) ** 3
     # 信号卷积
     s = convolve(x, r)
     return x, r, s
+
+
+def riker_calculate(fm):
+    return (1 - 2 * (np.pi * fm * t) ** 2) * np.exp(-(np.pi * fm * t) ** 2)
 
 
 def calculate_transfer_matrix(dic):

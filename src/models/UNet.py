@@ -1,7 +1,6 @@
 import torch
 from torch import nn as nn
 
-
 class UNet1D(nn.Module):
     def __init__(self, in_channels, out_channels, init_features=32):
         super(UNet1D, self).__init__()
